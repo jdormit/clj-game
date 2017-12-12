@@ -36,20 +36,28 @@
      (GL30/glBindFragDataLocation program 0 "outColor")
      (GL20/glLinkProgram program)
      (GL20/glUseProgram program)
-     (let [posAttrib (GL20/glGetAttribLocation program "position")]
+     (let [posAttrib (GL20/glGetAttribLocation program "position")
+           colorUniform (GL20/glGetUniformLocation program "triangleColor")]
        (GL20/glVertexAttribPointer posAttrib 2 GL11/GL_FLOAT false 0 0)
        (GL20/glEnableVertexAttribArray posAttrib)
-       {:vertices verts}))))
+       {:color [0.0 0.0 0.0]
+        :vertices verts
+        :colorUniform colorUniform}))))
 
 (defn update-state
   "Updates game state"
   [state]
-  state)
+  (update state :color (fn [color]
+                         (map (fn [c]
+                                (if (> c 1.0)
+                                  0.0
+                                  (+ (/ (rand) 100) c))) color))))
 
 (defn render
   "Renders the game"
   [state]
   (GL11/glClear (bit-or GL11/GL_COLOR_BUFFER_BIT GL11/GL_DEPTH_BUFFER_BIT))
+  (apply #(GL20/glUniform3f (:colorUniform state) %1 %2 %3) (:color state))
   (GL11/glDrawArrays GL11/GL_TRIANGLES 0 3))
 
 (defn create-window [width height title]
