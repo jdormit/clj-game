@@ -11,11 +11,12 @@
 (def game-title "So Dope")
 
 (defn to-float-buffer
-  "Creates a java.nio.FloatBuffer from a float-array"
+  "Creates a java.nio.FloatBuffer from a sequence"
   [seq]
-  (-> (BufferUtils/createFloatBuffer (count seq))
-      (.put seq)
-      (.flip)))
+  (let [arr (float-array seq)]
+    (-> (BufferUtils/createFloatBuffer (count arr))
+        (.put arr)
+        (.flip))))
 
 (defn setup
   "Initial game setup function. Returns the initial state"
