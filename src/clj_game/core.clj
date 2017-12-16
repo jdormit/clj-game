@@ -89,7 +89,7 @@
   (GL/createCapabilities)
   (GL11/glClearColor 0.0 0.0 0.0 0.0))
 
-(defn cleanup
+(defn terminate
   "Cleans up and terminates the program"
   []
   (GLFW/glfwTerminate))
@@ -98,7 +98,7 @@
   "The main game loop"
   [window state]
   (if (GLFW/glfwWindowShouldClose window)
-    (cleanup)
+    (terminate)
     (do (render state)
         (GLFW/glfwSwapBuffers window)
         (GLFW/glfwPollEvents)
