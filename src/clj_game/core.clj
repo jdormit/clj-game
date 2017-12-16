@@ -53,7 +53,7 @@
                                     (* 5 Float/BYTES)
                                     (* 2 Float/BYTES))
         (GL20/glEnableVertexAttribArray color-attribute)
-        {:triangle-verts triangle-verts}))))
+        {}))))
 
 (defn update-state
   "Updates game state"
