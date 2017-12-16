@@ -26,34 +26,34 @@
     (let [triangle-verts [0.0 0.5 1.0 0.0 0.0
                           0.5 -0.5 0.0 1.0 0.0
                           -0.5 -0.5 0.0 0.0 1.0]
-         vbo (GL15/glGenBuffers)
-         program (GL20/glCreateProgram)]
-     (GL15/glBindBuffer GL15/GL_ARRAY_BUFFER vbo)
-     (GL15/glBufferData GL15/GL_ARRAY_BUFFER
-                        (to-float-buffer (float-array triangle-verts))
-                        GL15/GL_STATIC_DRAW)
-     (GL20/glAttachShader program (shaders/basic-vertex-shader))
-     (GL20/glAttachShader program (shaders/basic-fragment-shader))
-     (GL30/glBindFragDataLocation program 0 "outColor")
-     (GL20/glLinkProgram program)
-     (GL20/glUseProgram program)
-     (let [position-attribute (GL20/glGetAttribLocation program "position")
-           color-attribute (GL20/glGetAttribLocation program "color")]
-       (GL20/glVertexAttribPointer position-attribute
-                                   2
-                                   GL11/GL_FLOAT
-                                   false
-                                   (* 5 Float/BYTES)
-                                   0)
-       (GL20/glEnableVertexAttribArray position-attribute)
-       (GL20/glVertexAttribPointer color-attribute
-                                   3
-                                   GL11/GL_FLOAT
-                                   false
-                                   (* 5 Float/BYTES)
-                                   (* 2 Float/BYTES))
-       (GL20/glEnableVertexAttribArray color-attribute)
-       {:triangle-verts triangle-verts}))))
+          vbo (GL15/glGenBuffers)
+          program (GL20/glCreateProgram)]
+      (GL15/glBindBuffer GL15/GL_ARRAY_BUFFER vbo)
+      (GL15/glBufferData GL15/GL_ARRAY_BUFFER
+                         (to-float-buffer (float-array triangle-verts))
+                         GL15/GL_STATIC_DRAW)
+      (GL20/glAttachShader program (shaders/basic-vertex-shader))
+      (GL20/glAttachShader program (shaders/basic-fragment-shader))
+      (GL30/glBindFragDataLocation program 0 "outColor")
+      (GL20/glLinkProgram program)
+      (GL20/glUseProgram program)
+      (let [position-attribute (GL20/glGetAttribLocation program "position")
+            color-attribute (GL20/glGetAttribLocation program "color")]
+        (GL20/glVertexAttribPointer position-attribute
+                                    2
+                                    GL11/GL_FLOAT
+                                    false
+                                    (* 5 Float/BYTES)
+                                    0)
+        (GL20/glEnableVertexAttribArray position-attribute)
+        (GL20/glVertexAttribPointer color-attribute
+                                    3
+                                    GL11/GL_FLOAT
+                                    false
+                                    (* 5 Float/BYTES)
+                                    (* 2 Float/BYTES))
+        (GL20/glEnableVertexAttribArray color-attribute)
+        {:triangle-verts triangle-verts}))))
 
 (defn update-state
   "Updates game state"
