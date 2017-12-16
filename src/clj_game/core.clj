@@ -23,14 +23,14 @@
   []
   (let [vao (GL30/glGenVertexArrays)]
     (GL30/glBindVertexArray vao)
-    (let [verts  [0.0 0.5 1.0 0.0 0.0
-                  0.5 -0.5 0.0 1.0 0.0
-                  -0.5 -0.5 0.0 0.0 1.0]
+    (let [triangleVerts [0.0 0.5 1.0 0.0 0.0
+                         0.5 -0.5 0.0 1.0 0.0
+                         -0.5 -0.5 0.0 0.0 1.0]
          vbo (GL15/glGenBuffers)
          program (GL20/glCreateProgram)]
      (GL15/glBindBuffer GL15/GL_ARRAY_BUFFER vbo)
      (GL15/glBufferData GL15/GL_ARRAY_BUFFER
-                        (to-float-buffer (float-array verts))
+                        (to-float-buffer (float-array triangleVerts))
                         GL15/GL_STATIC_DRAW)
      (GL20/glAttachShader program (shaders/basic-vertex-shader))
      (GL20/glAttachShader program (shaders/basic-fragment-shader))
@@ -53,7 +53,7 @@
                                    (* 5 Float/BYTES)
                                    (* 2 Float/BYTES))
        (GL20/glEnableVertexAttribArray colorAttrib)
-       {:vertices verts}))))
+       {:triangle-verts triangleVerts}))))
 
 (defn update-state
   "Updates game state"
