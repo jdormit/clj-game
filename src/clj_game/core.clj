@@ -38,7 +38,7 @@
      (GL20/glLinkProgram program)
      (GL20/glUseProgram program)
      (let [posAttrib (GL20/glGetAttribLocation program "position")
-           colAttrib (GL20/glGetAttribLocation program "color")]
+           colorAttrib (GL20/glGetAttribLocation program "color")]
        (GL20/glVertexAttribPointer posAttrib
                                    2
                                    GL11/GL_FLOAT
@@ -46,13 +46,13 @@
                                    (* 5 Float/BYTES)
                                    0)
        (GL20/glEnableVertexAttribArray posAttrib)
-       (GL20/glVertexAttribPointer colAttrib
+       (GL20/glVertexAttribPointer colorAttrib
                                    3
                                    GL11/GL_FLOAT
                                    false
                                    (* 5 Float/BYTES)
                                    (* 2 Float/BYTES))
-       (GL20/glEnableVertexAttribArray colAttrib)
+       (GL20/glEnableVertexAttribArray colorAttrib)
        {:vertices verts}))))
 
 (defn update-state
