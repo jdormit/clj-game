@@ -18,19 +18,35 @@
         (.put arr)
         (.flip))))
 
+(defn to-byte-buffer
+  "Creates a java.nio.ByteBuffer from a sequence"
+  [seq]
+  (let [arr (byte-array (map byte seq))]
+    (-> (BufferUtils/createByteBuffer (count arr))
+        (.put arr)
+        (.flip))))
+
 (defn setup
   "Initial game setup function. Returns the initial state"
   []
   (let [vao (GL30/glGenVertexArrays)]
     (GL30/glBindVertexArray vao)
-    (let [triangle-verts [0.0 0.5 1.0 0.0 0.0
-                          0.5 -0.5 0.0 1.0 0.0
-                          -0.5 -0.5 0.0 0.0 1.0]
+    (let [vertices [-0.5  0.5  1.0  0.0  0.0
+                     0.5  0.5  0.0  1.0  0.0
+                     0.5 -0.5  0.0  0.0  1.0
+                    -0.5 -0.5  1.0  1.0  0.0]
+          indices [0 1 2
+                   2 3 0]
           vertex-buffer (GL15/glGenBuffers)
+          indices-buffer (GL15/glGenBuffers)
           program (GL20/glCreateProgram)]
       (GL15/glBindBuffer GL15/GL_ARRAY_BUFFER vertex-buffer)
       (GL15/glBufferData GL15/GL_ARRAY_BUFFER
-                         (to-float-buffer (float-array triangle-verts))
+                         (to-float-buffer vertices)
+                         GL15/GL_STATIC_DRAW)
+      (GL15/glBindBuffer GL15/GL_ELEMENT_ARRAY_BUFFER indices-buffer)
+      (GL15/glBufferData GL15/GL_ELEMENT_ARRAY_BUFFER
+                         (to-byte-buffer indices)
                          GL15/GL_STATIC_DRAW)
       (GL20/glAttachShader program (shaders/basic-vertex-shader))
       (GL20/glAttachShader program (shaders/basic-fragment-shader))
@@ -64,7 +80,7 @@
   "Renders the game"
   [state]
   (GL11/glClear (bit-or GL11/GL_COLOR_BUFFER_BIT GL11/GL_DEPTH_BUFFER_BIT))
-  (GL11/glDrawArrays GL11/GL_TRIANGLES 0 3))
+  (GL11/glDrawElements GL11/GL_TRIANGLES 6 GL11/GL_UNSIGNED_BYTE 0))
 
 (defn create-window [width height title]
   (GLFW/glfwDefaultWindowHints)
