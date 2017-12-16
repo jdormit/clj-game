@@ -23,9 +23,9 @@
   []
   (let [vao (GL30/glGenVertexArrays)]
     (GL30/glBindVertexArray vao)
-    (let [verts  [0.0 0.5
-                  0.5 -0.5
-                  -0.5 -0.5]
+    (let [verts  [0.0 0.5 1.0 0.0 0.0
+                  0.5 -0.5 0.0 1.0 0.0
+                  -0.5 -0.5 0.0 0.0 1.0]
          buf (GL15/glGenBuffers)
          program (GL20/glCreateProgram)]
      (GL15/glBindBuffer GL15/GL_ARRAY_BUFFER buf)
@@ -38,27 +38,32 @@
      (GL20/glLinkProgram program)
      (GL20/glUseProgram program)
      (let [posAttrib (GL20/glGetAttribLocation program "position")
-           colorUniform (GL20/glGetUniformLocation program "triangleColor")]
-       (GL20/glVertexAttribPointer posAttrib 2 GL11/GL_FLOAT false 0 0)
+           colAttrib (GL20/glGetAttribLocation program "color")]
+       (GL20/glVertexAttribPointer posAttrib
+                                   2
+                                   GL11/GL_FLOAT
+                                   false
+                                   (* 5 Float/BYTES)
+                                   0)
        (GL20/glEnableVertexAttribArray posAttrib)
-       {:color [0.0 0.0 0.0]
-        :vertices verts
-        :colorUniform colorUniform}))))
+       (GL20/glVertexAttribPointer colAttrib
+                                   3
+                                   GL11/GL_FLOAT
+                                   false
+                                   (* 5 Float/BYTES)
+                                   (* 2 Float/BYTES))
+       (GL20/glEnableVertexAttribArray colAttrib)
+       {:vertices verts}))))
 
 (defn update-state
   "Updates game state"
   [state]
-  (update state :color (fn [color]
-                         (map (fn [c]
-                                (if (> c 1.0)
-                                  0.0
-                                  (+ (/ (rand) 100) c))) color))))
+  state)
 
 (defn render
   "Renders the game"
   [state]
   (GL11/glClear (bit-or GL11/GL_COLOR_BUFFER_BIT GL11/GL_DEPTH_BUFFER_BIT))
-  (apply #(GL20/glUniform3f (:colorUniform state) %1 %2 %3) (:color state))
   (GL11/glDrawArrays GL11/GL_TRIANGLES 0 3))
 
 (defn create-window [width height title]
