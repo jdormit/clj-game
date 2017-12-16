@@ -26,9 +26,9 @@
     (let [verts  [0.0 0.5 1.0 0.0 0.0
                   0.5 -0.5 0.0 1.0 0.0
                   -0.5 -0.5 0.0 0.0 1.0]
-         buf (GL15/glGenBuffers)
+         vbo (GL15/glGenBuffers)
          program (GL20/glCreateProgram)]
-     (GL15/glBindBuffer GL15/GL_ARRAY_BUFFER buf)
+     (GL15/glBindBuffer GL15/GL_ARRAY_BUFFER vbo)
      (GL15/glBufferData GL15/GL_ARRAY_BUFFER
                         (to-float-buffer (float-array verts))
                         GL15/GL_STATIC_DRAW)
