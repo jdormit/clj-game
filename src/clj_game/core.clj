@@ -14,22 +14,21 @@
 (defn setup
   "Initial game setup function. Returns the initial state."
   []
-  (let [vao (GL30/glGenVertexArrays)]
-    (GL30/glBindVertexArray vao)
-    (let [vertices [-0.5  0.5  1.0  0.0  0.0
-                     0.5  0.5  0.0  1.0  0.0
-                     0.5 -0.5  0.0  0.0  1.0
-                    -0.5 -0.5  1.0  1.0  0.0]
-          indices [0 1 2
-                   2 3 0]
-          vertex-buffer (opengl/load-data vertices :float :array-buffer :static-draw)
-          indices-buffer (opengl/load-data indices :byte :element-array-buffer :static-draw)
-          program (opengl/link-shaders [(shaders/basic-vertex-shader)
-                                        (shaders/basic-fragment-shader)])]
-      (GL20/glUseProgram program)
-      (opengl/link-attribute program "position" 2 :float false (* 5 Float/BYTES) 0)
-      (opengl/link-attribute program "color" 3 :float false (* 5 Float/BYTES) (* 2 Float/BYTES))
-      {})))
+  (GL30/glBindVertexArray (GL30/glGenVertexArrays))
+  (let [vertices [-0.5  0.5  1.0  0.0  0.0
+                   0.5  0.5  0.0  1.0  0.0
+                   0.5 -0.5  0.0  0.0  1.0
+                  -0.5 -0.5  1.0  1.0  0.0]
+        indices [0 1 2
+                 2 3 0]
+        vertex-buffer (opengl/load-data vertices :float :array-buffer :static-draw)
+        indices-buffer (opengl/load-data indices :byte :element-array-buffer :static-draw)
+        program (opengl/link-shaders [(shaders/basic-vertex-shader)
+                                      (shaders/basic-fragment-shader)])]
+    (GL20/glUseProgram program)
+    (opengl/link-attribute program "position" 2 :float false (* 5 Float/BYTES) 0)
+    (opengl/link-attribute program "color" 3 :float false (* 5 Float/BYTES) (* 2 Float/BYTES))
+    {}))
 
 (defn update-state
   "Updates game state."
