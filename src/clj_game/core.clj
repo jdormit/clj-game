@@ -27,23 +27,9 @@
           program (opengl/link-shaders [(shaders/basic-vertex-shader)
                                         (shaders/basic-fragment-shader)])]
       (GL20/glUseProgram program)
-      (let [position-attribute (GL20/glGetAttribLocation program "position")
-            color-attribute (GL20/glGetAttribLocation program "color")]
-        (GL20/glVertexAttribPointer position-attribute
-                                    2
-                                    GL11/GL_FLOAT
-                                    false
-                                    (* 5 Float/BYTES)
-                                    0)
-        (GL20/glEnableVertexAttribArray position-attribute)
-        (GL20/glVertexAttribPointer color-attribute
-                                    3
-                                    GL11/GL_FLOAT
-                                    false
-                                    (* 5 Float/BYTES)
-                                    (* 2 Float/BYTES))
-        (GL20/glEnableVertexAttribArray color-attribute)
-        {}))))
+      (opengl/link-attribute program "position" 2 :float false (* 5 Float/BYTES) 0)
+      (opengl/link-attribute program "color" 3 :float false (* 5 Float/BYTES) (* 2 Float/BYTES))
+      {})))
 
 (defn update-state
   "Updates game state"

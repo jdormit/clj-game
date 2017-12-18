@@ -1,7 +1,7 @@
 (ns clj-game.opengl
   (:require [clojure.core.match :refer [match]]
             [clojure.string :as string])
-  (:import (org.lwjgl.opengl GL15 GL20)
+  (:import (org.lwjgl.opengl GL11 GL15 GL20)
            (org.lwjgl BufferUtils)))
 
 (defn make-shader
@@ -78,3 +78,19 @@
     (GL15/glBindBuffer buffer-type-int buffer)
     (GL15/glBufferData buffer-type-int buffer-data usage-hint-int)
     buffer))
+
+(defn link-attribute
+  "Links a shader attribute to values in a buffer on the graphics card.
+
+  `data-type` is one of :byte, :unsigned-byte, :short, :unsigned-short,
+  :int, :unsigned-int, :half-float, :float, :double, :fixed"
+  [program attribute data-count data-type normalized step offset]
+  (let [attrib-location (GL20/glGetAttribLocation program attribute)]
+    (GL20/glVertexAttribPointer attrib-location
+                                data-count
+                                (keyword-to-gl-const "GL11" data-type)
+                                normalized
+                                step
+                                offset)
+    (GL20/glEnableVertexAttribArray attrib-location)
+    attrib-location))
