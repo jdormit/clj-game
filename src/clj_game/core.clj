@@ -11,22 +11,6 @@
 (def height 720)
 (def game-title "So Dope")
 
-(defn to-float-buffer
-  "Creates a java.nio.FloatBuffer from a sequence"
-  [seq]
-  (let [arr (float-array seq)]
-    (-> (BufferUtils/createFloatBuffer (count arr))
-        (.put arr)
-        (.flip))))
-
-(defn to-byte-buffer
-  "Creates a java.nio.ByteBuffer from a sequence"
-  [seq]
-  (let [arr (byte-array (map byte seq))]
-    (-> (BufferUtils/createByteBuffer (count arr))
-        (.put arr)
-        (.flip))))
-
 (defn setup
   "Initial game setup function. Returns the initial state"
   []
@@ -38,18 +22,10 @@
                     -0.5 -0.5  1.0  1.0  0.0]
           indices [0 1 2
                    2 3 0]
-          vertex-buffer (GL15/glGenBuffers)
-          indices-buffer (GL15/glGenBuffers)
+          vertex-buffer (opengl/load-data vertices :float :array-buffer :static-draw)
+          indices-buffer (opengl/load-data indices :byte :element-array-buffer :static-draw)
           program (opengl/link-shaders [(shaders/basic-vertex-shader)
                                         (shaders/basic-fragment-shader)])]
-      (GL15/glBindBuffer GL15/GL_ARRAY_BUFFER vertex-buffer)
-      (GL15/glBufferData GL15/GL_ARRAY_BUFFER
-                         (to-float-buffer vertices)
-                         GL15/GL_STATIC_DRAW)
-      (GL15/glBindBuffer GL15/GL_ELEMENT_ARRAY_BUFFER indices-buffer)
-      (GL15/glBufferData GL15/GL_ELEMENT_ARRAY_BUFFER
-                         (to-byte-buffer indices)
-                         GL15/GL_STATIC_DRAW)
       (GL20/glUseProgram program)
       (let [position-attribute (GL20/glGetAttribLocation program "position")
             color-attribute (GL20/glGetAttribLocation program "color")]
