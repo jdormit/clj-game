@@ -7,7 +7,7 @@
            (org.lwjgl BufferUtils))
   (:gen-class))
 
-(def width 1280)
+(def width 720)
 (def height 720)
 (def game-title "So Dope")
 
