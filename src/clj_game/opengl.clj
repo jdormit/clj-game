@@ -54,10 +54,22 @@
                   (string/replace #"-" "_")
                   (string/upper-case))))))
 
+(defn gen-buffer
+  "Initializes a VBO on the graphics card.
+
+  `buffer-type` is one of :array-buffer, :element-array-buffer,
+  :pixel-pack-buffer, :pixel-unpack-buffer, :transform-feedback-buffer,
+  :uniform-buffer, :texture-buffer, :copy-read-buffer, :copy-write-buffer,
+  :draw-indirect-buffer, :atomic-counter-buffer, :dispatch-indirect-buffer,
+  :shader-storage-buffer, :parameter-buffer-arb"
+  [buffer-type]
+  (let [buffer-type-int (keyword-to-gl-const "GL15" buffer-type)
+        buffer (GL15/glGenBuffers)]
+    (GL15/glBindBuffer buffer-type-int buffer)
+    buffer))
+
 (defn load-data
   "Loads data into a VBO on the graphics card.
-
-  `data-type` is one of :float, :byte.
 
   `buffer-type` is one of :array-buffer, :element-array-buffer,
   :pixel-pack-buffer, :pixel-unpack-buffer, :transform-feedback-buffer,
@@ -65,19 +77,18 @@
   :draw-indirect-buffer, :atomic-counter-buffer, :dispatch-indirect-buffer,
   :shader-storage-buffer, :parameter-buffer-arb
 
+  `data-type` is one of :float, :byte.
+
   `usage-hint` is one of :stream-draw, :stream-read, :stream-copy,
   :static-draw, :static-read, :static-copy, :dynamic-draw,
   :dynamic-read, :dynamic-copy"
-  [data data-type buffer-type usage-hint]
+  [data buffer-type data-type usage-hint]
   (let [buffer-data (match data-type
                            :float (to-float-buffer data)
                            :byte (to-byte-buffer data))
         buffer-type-int (keyword-to-gl-const "GL15" buffer-type)
-        usage-hint-int (keyword-to-gl-const "GL15" usage-hint)
-        buffer (GL15/glGenBuffers)]
-    (GL15/glBindBuffer buffer-type-int buffer)
-    (GL15/glBufferData buffer-type-int buffer-data usage-hint-int)
-    buffer))
+        usage-hint-int (keyword-to-gl-const "GL15" usage-hint)]
+    (GL15/glBufferData buffer-type-int buffer-data usage-hint-int)))
 
 (defn link-attribute
   "Links a shader attribute to values in a buffer on the graphics card.

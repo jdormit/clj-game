@@ -21,11 +21,13 @@
                   -0.5 -0.5  1.0  1.0  0.0]
         indices [0 1 2
                  2 3 0]
-        vertex-buffer (opengl/load-data vertices :float :array-buffer :static-draw)
-        indices-buffer (opengl/load-data indices :byte :element-array-buffer :static-draw)
+        vertex-buffer (opengl/gen-buffer :array-buffer)
+        indices-buffer (opengl/gen-buffer :element-array-buffer)
         program (opengl/link-shaders [(shaders/basic-vertex-shader)
                                       (shaders/basic-fragment-shader)])]
     (GL20/glUseProgram program)
+    (opengl/load-data vertices :array-buffer :float :static-draw)
+    (opengl/load-data indices :element-array-buffer :byte :static-draw)
     (opengl/link-attribute program "position" 2 :float false (* 5 Float/BYTES) 0)
     (opengl/link-attribute program "color" 3 :float false (* 5 Float/BYTES) (* 2 Float/BYTES))
     {}))
