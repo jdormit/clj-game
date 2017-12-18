@@ -5,7 +5,7 @@
            (org.lwjgl BufferUtils)))
 
 (defn make-shader
-  "Creates and compiles a new shader"
+  "Creates and compiles a new shader."
   [type source]
   (fn []
     (let [shader (GL20/glCreateShader type)]
@@ -16,7 +16,7 @@
         (throw (RuntimeException. (GL20/glGetShaderInfoLog shader)))))))
 
 (defn link-shaders
-  "Links shaders into a program"
+  "Links shaders into a program."
   ;; TODO support writing to multiple buffers from the fragment shader
   ;; via glBindFragDataLocation
   [shaders]
@@ -27,7 +27,7 @@
     program))
 
 (defn to-float-buffer
-  "Creates a java.nio.FloatBuffer from a sequence"
+  "Creates a java.nio.FloatBuffer from a sequence."
   [seq]
   (let [arr (float-array seq)]
     (-> (BufferUtils/createFloatBuffer (count arr))
@@ -35,7 +35,7 @@
         (.flip))))
 
 (defn to-byte-buffer
-  "Creates a java.nio.ByteBuffer from a sequence"
+  "Creates a java.nio.ByteBuffer from a sequence."
   [seq]
   (let [arr (byte-array (map byte seq))]
     (-> (BufferUtils/createByteBuffer (count arr))
@@ -43,7 +43,7 @@
         (.flip))))
 
 (defn keyword-to-gl-const
-  "Transforms a keyword into the equivalent GL_ constant"
+  "Transforms a keyword into the equivalent GL_ constant."
   [gl-version keyword]
   (eval (read-string
          (str "org.lwjgl.opengl."

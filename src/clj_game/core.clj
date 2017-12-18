@@ -12,7 +12,7 @@
 (def game-title "So Dope")
 
 (defn setup
-  "Initial game setup function. Returns the initial state"
+  "Initial game setup function. Returns the initial state."
   []
   (let [vao (GL30/glGenVertexArrays)]
     (GL30/glBindVertexArray vao)
@@ -32,12 +32,12 @@
       {})))
 
 (defn update-state
-  "Updates game state"
+  "Updates game state."
   [state]
   state)
 
 (defn render
-  "Renders the game"
+  "Renders the game."
   [state]
   (GL11/glClear (bit-or GL11/GL_COLOR_BUFFER_BIT GL11/GL_DEPTH_BUFFER_BIT))
   (GL11/glDrawElements GL11/GL_TRIANGLES 6 GL11/GL_UNSIGNED_BYTE 0))
@@ -60,18 +60,18 @@
   (GLFW/glfwShowWindow window))
 
 (defn setup-opengl
-  "Sets up OpenGL. Must have a current OpenGL context"
+  "Sets up OpenGL. Must have a current OpenGL context."
   []
   (GL/createCapabilities)
   (GL11/glClearColor 0.0 0.0 0.0 0.0))
 
 (defn terminate
-  "Cleans up and terminates the program"
+  "Cleans up and terminates the program."
   []
   (GLFW/glfwTerminate))
 
 (defn game-loop
-  "The main game loop"
+  "The main game loop."
   [window state]
   (if (GLFW/glfwWindowShouldClose window)
     (terminate)
