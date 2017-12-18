@@ -1,5 +1,6 @@
 (ns clj-game.core
-  (:require [clj-game.shaders :as shaders])
+  (:require [clj-game.shaders :as shaders]
+            [clj-game.opengl :as opengl])
   (:import (org.lwjgl.glfw GLFW GLFWErrorCallback)
            (org.lwjgl.opengl GL GL11 GL15 GL20 GL30)
            (org.lwjgl.system MemoryUtil MemoryStack)
@@ -39,7 +40,8 @@
                    2 3 0]
           vertex-buffer (GL15/glGenBuffers)
           indices-buffer (GL15/glGenBuffers)
-          program (GL20/glCreateProgram)]
+          program (opengl/link-shaders [(shaders/basic-vertex-shader)
+                                        (shaders/basic-fragment-shader)])]
       (GL15/glBindBuffer GL15/GL_ARRAY_BUFFER vertex-buffer)
       (GL15/glBufferData GL15/GL_ARRAY_BUFFER
                          (to-float-buffer vertices)
@@ -48,10 +50,6 @@
       (GL15/glBufferData GL15/GL_ELEMENT_ARRAY_BUFFER
                          (to-byte-buffer indices)
                          GL15/GL_STATIC_DRAW)
-      (GL20/glAttachShader program (shaders/basic-vertex-shader))
-      (GL20/glAttachShader program (shaders/basic-fragment-shader))
-      (GL30/glBindFragDataLocation program 0 "outColor")
-      (GL20/glLinkProgram program)
       (GL20/glUseProgram program)
       (let [position-attribute (GL20/glGetAttribLocation program "position")
             color-attribute (GL20/glGetAttribLocation program "color")]
