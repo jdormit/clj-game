@@ -111,3 +111,36 @@
                                 offset)
     (GL20/glEnableVertexAttribArray attrib-location)
     attrib-location))
+
+(defn get-uniform
+  "Gets a uniform pointer."
+  [program uniform]
+  (GL20/glGetUniformLocation program uniform))
+
+(defn get-uniform-setter
+  "Gets the appropriate function to set a uniform based on type and arg count.
+
+  `data-type` is one of :int, :float, :double"
+  [data-type arg-count]
+  (let [base "glUniform"
+        package (str "org.lwjgl.opengl."
+                     (match data-type
+                            :double "GL40"
+                            _ "GL20"))
+        type-char (match data-type
+                         :int "i"
+                         :float "f"
+                         :double "d")
+        func-name (str package "/" base arg-count type-char)]
+    (fn [uniform & args]
+      (eval
+       (read-string
+        (str "(" func-name " " uniform " " (string/join " " args) ")"))))))
+
+(defn set-uniform
+  "Sets the value of a uniform.
+
+  `data-type` is one of :int, :float, :double"
+  [uniform data-type & values]
+  (let [setter (get-uniform-setter data-type (count values))]
+    (apply setter uniform values)))
