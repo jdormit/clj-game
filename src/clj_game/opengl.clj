@@ -4,11 +4,27 @@
   (:import (org.lwjgl.opengl GL11 GL15 GL20)
            (org.lwjgl BufferUtils)))
 
+(defn keyword-to-gl-const
+  "Transforms a keyword into the equivalent GL_ constant."
+  [gl-version keyword]
+  (eval (read-string
+         (str "org.lwjgl.opengl."
+              (string/upper-case gl-version)
+              "/"
+              "GL_"
+              (-> (name keyword)
+                  (string/replace #"-" "_")
+                  (string/upper-case))))))
+
 (defn make-shader
-  "Creates and compiles a new shader."
+  "Creates and compiles a new shader.
+
+  `type` is one of :vertex-shader, :fragment-shader, :geometry-shader,
+  :tess-control-shader, :tess-evaluation-shader."
   [type source]
   (fn []
-    (let [shader (GL20/glCreateShader type)]
+    (let [type-int (keyword-to-gl-const "GL20" type)
+          shader (GL20/glCreateShader type-int)]
       (GL20/glShaderSource shader source)
       (GL20/glCompileShader shader)
       (if (= (GL20/glGetShaderi shader GL20/GL_COMPILE_STATUS) 1)
@@ -42,17 +58,7 @@
         (.put arr)
         (.flip))))
 
-(defn keyword-to-gl-const
-  "Transforms a keyword into the equivalent GL_ constant."
-  [gl-version keyword]
-  (eval (read-string
-         (str "org.lwjgl.opengl."
-              (string/upper-case gl-version)
-              "/"
-              "GL_"
-              (-> (name keyword)
-                  (string/replace #"-" "_")
-                  (string/upper-case))))))
+
 
 (defn gen-buffer
   "Initializes a VBO on the graphics card.
