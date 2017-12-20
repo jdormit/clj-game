@@ -7,14 +7,13 @@
 (defn keyword-to-gl-const
   "Transforms a keyword into the equivalent GL_ constant."
   [gl-version keyword]
-  (eval (read-string
-         (str "org.lwjgl.opengl."
-              (string/upper-case gl-version)
-              "/"
-              "GL_"
-              (-> (name keyword)
+  (let [package "org.lwjgl.opengl"
+        class (string/upper-case gl-version)
+        const (-> (name keyword)
                   (string/replace #"-" "_")
-                  (string/upper-case))))))
+                  (string/upper-case))
+        gl-const (symbol (str package "." class "/" "GL_" const))]
+    (eval gl-const)))
 
 (defn make-shader
   "Creates and compiles a new shader.
@@ -131,11 +130,10 @@
                          :int "i"
                          :float "f"
                          :double "d")
-        func-name (str package "/" base arg-count type-char)]
+        func-name (symbol (str package "/" base arg-count type-char))]
     (fn [uniform & args]
       (eval
-       (read-string
-        (str "(" func-name " " uniform " " (string/join " " args) ")"))))))
+       `(~func-name ~uniform ~@args)))))
 
 (defn set-uniform
   "Sets the value of a uniform.
