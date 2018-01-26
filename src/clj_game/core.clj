@@ -1,10 +1,8 @@
 (ns clj-game.core
-  (:require [clj-game.shaders :as shaders]
-            [clj-game.opengl :as opengl])
+  (:require [clj-game.opengl :as opengl])
   (:import (org.lwjgl.glfw GLFW GLFWErrorCallback)
-           (org.lwjgl.opengl GL GL11 GL15 GL20 GL30)
-           (org.lwjgl.system MemoryUtil MemoryStack)
-           (org.lwjgl BufferUtils))
+           (org.lwjgl.opengl GL GL11)
+           (org.lwjgl.system MemoryUtil))
   (:gen-class))
 
 (def width 720)
