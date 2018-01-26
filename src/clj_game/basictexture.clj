@@ -1,4 +1,4 @@
-(ns clj-game.basictextures
+(ns clj-game.basictexture
   (:require [clj-game.opengl :as opengl])
   (:import (org.lwjgl.opengl GL11 GL20 GL30 GL12)))
 
