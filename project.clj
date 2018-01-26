@@ -1,4 +1,15 @@
-(def os-classifier "natives-macos")
+(require '[clojure.string :as string])
+
+(def os-classifier
+  (let [os-name (string/lower-case (System/getProperty "os.name"))]
+    (cond
+      (not (nil? (string/index-of os-name "win"))) "natives-windows"
+      (not (nil? (string/index-of os-name "mac"))) "natives-macos"
+      (or
+        (not (nil? (string/index-of os-name "nix")))
+        (not (nil? (string/index-of os-name "nux")))
+        (not (nil? (string/index-of os-name "aix")))) "natives-linux"
+      :else (throw (RuntimeException. "Unsupported OS")))))
 
 (defproject clj-game "0.1.0-SNAPSHOT"
   :description "FIXME: write description"
