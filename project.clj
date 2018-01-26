@@ -18,6 +18,7 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [org.clojure/core.match "0.3.0-alpha5"]
+                 [org.l33tlabs.twl/pngdecoder "1.0"]
                  [org.lwjgl/lwjgl "3.1.5"]
                  [org.lwjgl/lwjgl-assimp "3.1.5"]
                  [org.lwjgl/lwjgl-bgfx "3.1.5"]
